@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Docker (and MongoDB)</title>
+
+
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.min.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/theme/beige.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="bower_components/reveal.js/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write( '<link rel="stylesheet" href="bower_components/reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+
+
+        <section>
+            <h1>Docker (and MongoDB)</h1>
+        </section>
+
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## What is Docker? ##
+
+                    * Is it a plane? *No*.
+                    * Is it a whale? *Yes*.
+
+                    ![](images/docker-whale.jpg)
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## What is Docker? ##
+
+                    * Is it a virtual machine? *Not quite*.
+                    * Is it an orchestration tool? *Not only*.
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## So WTF is Docker? ##
+
+                    * A tool for application / process level virtualization
+                    * Process level because it allows to separate processes on a more fine-granular level than the OS natively (cgroups > chroot)
+                    * Reproducable environments using build files (so called Dockerfile)
+                </script>
+            </section>
+
+<section data-markdown>
+                <script type="text/template">
+                    ## So WTF is Docker? ##
+
+                    ![](images/ld.png)
+
+                   
+             </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## So WTF is Docker? ##
+
+                    * Versioned images
+                    * Network-bridge management
+                    * Access to thousands of preconfigured images using Docker Hub (45.324 as of writing)
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## What Docker does ##
+
+                    * It puts applications inside so-called containers which are virtualized areas in the operating system.
+                    * Also it does some magic container management and network bridging kung-fu in the background.
+                    * Additionally it allows you to share images (not only) using Docker Hub, thus allowing portability of environments.
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## What Docker can be used for ##
+
+                    * Fast development
+                    * Reproducable development ("But it does work on my machine!")
+                    * Useful for automated testing
+                    * Build environments
+                    * Everywhere where complexity is a (infrastructure) problem
+                    * ...
+
+                </script>
+            </section>
+
+        </section>
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## Getting started with Docker ##
+
+                    * It needs to be installed first, duh! (User Privileges)
+                    * Official packages!
+                    * Virtual Machines for MacOS / Windows
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Simple Example ##
+
+                    ```
+                    docker run --rm --name "my-first-container" busybox:latest echo "I am a tea pot!"
+                    ```
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Simple Example ##
+
+                    ```
+                    docker run --rm --name "my-first-container" busybox:latest echo "I am a tea pot!"
+                    ```
+
+                    * "run": create a new container from available image
+                    * "--rm": remove container after run
+                    * "--name" : give this container a name
+                    * "busybox:latest": use image "busybox" with tag (version) "latest"
+                    * 'echo "I am a tea pot!"': command to execute, overrides image default
+
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Simple MongoDB Example ##
+
+                    * Starts official MongoDB image in background
+
+                    ```
+                    docker run -d -p :27017 --name "my-first-mongo" mongo:2.6
+                    ```
+
+                </script>
+            </section>
+
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Simple MongoDB Example ##
+
+                    ```
+                    docker run -d -p :27017 --name "my-first-mongo" mongo:2.6
+                    ```
+
+                    * "-d": in background (daemon mode)
+                    * "-p" : dynamically forward MongoDB port
+
+                    ```
+                    docker stop my-first-mongo
+                    ```
+
+                    ```
+                    docker start my-first-mongo
+                    ```
+
+                    ```
+                    docker logs my-first-mongo
+                    ```
+
+                </script>
+            </section>
+
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Simple MongoDB Example ##
+
+                    Show port mappings:
+
+                    ```
+                    docker port my-first-mongo
+                    ```
+
+                    Show network configuration:
+
+                    ```
+                    docker inspect my-first-mongo
+                    ```
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## More Advanced MongoDB Example ##
+
+                    * Volumes
+                    * Data Containers
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## More Advanced MongoDB Example ##
+
+
+                    ```
+                    docker run -d -i --name "my-second-mongo-data" -v /data/db busybox:latest /bin/sh
+                    ```
+
+                    ```
+                    docker run -d -p :27017 --volumes-from my-second-mongo-data --name "my-second-mongo" mongo:2.6
+                    ```
+
+                    ```
+                    docker-enter my-second-mongo-data /bin/sh
+                    ```
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Replica Set using Docker-Compose ##
+
+                    * Docker-Compose is tool for more complex infrastructures
+                    * Stack orchestration
+                    * Uses descriptive files in YAML
+
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Replica Set using Docker-Compose ##
+
+                    docker-compose.yml
+
+                    ```
+                    rs1m0:
+                    image: mongo:2.6
+                    dns:
+                    - 172.17.42.1
+                    ports:
+                    - ":27017"
+                    command: mongod --replSet rs1 --noprealloc --smallfiles
+                    ```
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Replica Set using Docker-Compose ##
+
+                    rs-init.js
+                    ```
+                    rs.initiate({
+                        "_id" : "rs1",
+                        "version" : 1,
+                        "members" : [
+                            {
+                             "_id" : 0,
+                             "host" : "172.17.0.?1:27017"
+                           }
+                        ]
+                    });
+                    ```
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ## Cleaning up... ##
+
+                    * The way in which Docker works results in many files!
+
+                    ```
+                    # /var/lib/docker/vfs/dir$ du -h ./
+                    3,2G	./b28d4b7e65ae3eab7f88e2ff08fc1d06d18f8214c749346bc44bcbdabc80fedb
+                    3,4G	./e60e7bb11021d78d8193953948fbbe60f7fc339acb8833a079325aaf1fb51cd0
+                    417M	./d20de5098bafd188238f6e441e4ea6b6bb8f78b77c39c9fd7180026dc4bebb0d
+                    45M	./ee5dd50818feeb97c19ebbcedb1d18020bb235dcfbf3ae0386e7822c648ffec4
+                    68K	./cddf3109fc4590db16bee2a2d7b89248f0c9853671701cbc9417379e1345b124
+                    3,2G	./c275275c39c8ac73f6b160da9d4dc22a7e2460976329de16db0cb84dc6a4fa7c
+                    4,0K	./be3470a1fb859b233fbdb6915de71b859abae79a9526bae7599e21d6378b3fee
+                    4,0K	./ca97d6e18830b888e9ad62551ddf5389f47e43dcdf599f6a286c5832ff24e42b
+                    ```
+
+                    ```
+                    https://github.com/chadoe/docker-cleanup-volumes
+                    ```
+                </script>
+            </section>
+
+
+        </section>
+
+        <section data-markdown>
+            <script type="text/template">
+                ## Thanks for the attention! ##
+                ## Got questions? ##
+
+
+            </script>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="bower_components/marked/lib/marked.js"></script>
+<script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+<script src="bower_components/reveal.js/js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /bower_components/reveal.js/css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            // { src: 'bower_components/reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+</body>
+</html>
+\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00
